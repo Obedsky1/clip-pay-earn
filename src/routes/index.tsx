@@ -82,6 +82,23 @@ function Landing() {
             Millions of views. Almost zero pay. There's a better way — brands now pay creators
             directly to post short clips on TikTok, Reels & Facebook.
           </p>
+          <div className="relative mt-8 overflow-hidden rounded-[28px] border border-border">
+            <img
+              src={heroCreator}
+              alt="Young creator filming a TikTok-style video on their phone"
+              width={1024}
+              height={1280}
+              className="aspect-[4/5] w-full object-cover"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background via-background/70 to-transparent p-4">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-primary" /> Live now
+              </div>
+              <div className="mt-1 text-sm font-semibold">
+                Real creators are already earning from clips
+              </div>
+            </div>
+          </div>
           <div className="mt-8 space-y-3">
             <CTAButton large>Learn How It Works</CTAButton>
             <a
