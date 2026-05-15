@@ -404,6 +404,182 @@ function Landing() {
           </div>
         </section>
 
+        {/* CURRICULUM */}
+        <section className="py-12">
+          <SectionLabel>
+            <BookOpen className="h-3 w-3" /> Curriculum
+          </SectionLabel>
+          <h2 className="mt-4 text-3xl font-black leading-tight">
+            Module-by-module breakdown
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Six short modules. Each one builds on the last.
+          </p>
+
+          <div className="mt-6 overflow-hidden rounded-[28px] border border-border">
+            <img
+              src={phoneEditing}
+              alt="Smartphone showing video editing timeline next to dollar bills"
+              width={1280}
+              height={1024}
+              loading="lazy"
+              className="aspect-[5/4] w-full object-cover"
+            />
+          </div>
+
+          <div className="mt-6 space-y-4">
+            {[
+              {
+                n: "01",
+                t: "Foundations: how creators get paid",
+                d: "The brand-campaign model in plain English. Where the money actually comes from and why it's open to beginners.",
+                bullets: [
+                  "How content reward platforms work",
+                  "Platform payouts vs. brand payouts",
+                  "What 'attention' is worth in 2025",
+                ],
+                i: BookOpen,
+              },
+              {
+                n: "02",
+                t: "Finding viral-ready content",
+                d: "How to spot moments that already want to go viral — in podcasts, interviews and product videos.",
+                bullets: [
+                  "The 3-second hook test",
+                  "Where to find source videos",
+                  "Trending sound research from your phone",
+                ],
+                i: Eye,
+              },
+              {
+                n: "03",
+                t: "Mobile editing in CapCut",
+                d: "Step-by-step editing using only your phone. No laptop, no paid software.",
+                bullets: [
+                  "Cutting a 60-second clip from a long video",
+                  "Captions, hooks and zoom effects",
+                  "Exporting in the right format",
+                ],
+                i: Scissors,
+              },
+              {
+                n: "04",
+                t: "Posting that gets views",
+                d: "How to post on TikTok, Reels and Facebook so the algorithm picks it up.",
+                bullets: [
+                  "Caption + hashtag formula",
+                  "Best posting times",
+                  "Avoiding common shadowban mistakes",
+                ],
+                i: Hash,
+              },
+              {
+                n: "05",
+                t: "Joining campaigns on Whop",
+                d: "How to find brand campaigns, read the rules, and submit your first paid clip.",
+                bullets: [
+                  "Account setup walkthrough",
+                  "Reading a campaign brief",
+                  "Submitting links the right way",
+                ],
+                i: Target,
+              },
+              {
+                n: "06",
+                t: "Scaling to consistent income",
+                d: "Turning the first paid clip into a repeatable workflow.",
+                bullets: [
+                  "Batch editing 5 clips a day",
+                  "Multi-account posting safely",
+                  "Tracking what actually works",
+                ],
+                i: Rocket,
+              },
+            ].map(({ n, t, d, bullets, i: Icon }) => (
+              <div
+                key={n}
+                className="rounded-3xl border border-border bg-secondary p-5"
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-primary-foreground"
+                    style={{ background: "var(--grad-cta)" }}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-mono font-bold text-muted-foreground">
+                      Module {n}
+                    </div>
+                    <h3 className="text-lg font-bold leading-tight">{t}</h3>
+                  </div>
+                </div>
+                <p className="mt-3 text-[15px] text-muted-foreground">{d}</p>
+                <ul className="mt-3 space-y-1.5">
+                  {bullets.map((b) => (
+                    <li
+                      key={b}
+                      className="flex items-start gap-2 text-[14px] text-foreground/90"
+                    >
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <CTAButton large>Get Access to Clipping System</CTAButton>
+          </div>
+        </section>
+
+        {/* QUIZ */}
+        <section className="py-12">
+          <SectionLabel>
+            <Target className="h-3 w-3" /> 60-second quiz
+          </SectionLabel>
+          <h2 className="mt-4 text-3xl font-black leading-tight">
+            Which path should you start with?
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Answer 3 quick questions and we'll point you at the easier first move
+            — clipping or original content.
+          </p>
+          <div className="mt-6">
+            <Quiz />
+          </div>
+        </section>
+
+        {/* IMAGE BREAK */}
+        <section className="py-8">
+          <div className="overflow-hidden rounded-[28px] border border-border">
+            <img
+              src={phonesStack}
+              alt="Three phones stacked showing short videos with view counts"
+              width={1024}
+              height={1280}
+              loading="lazy"
+              className="aspect-[4/5] w-full object-cover"
+            />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="py-12">
+          <SectionLabel>FAQ</SectionLabel>
+          <h2 className="mt-4 text-3xl font-black leading-tight">
+            Questions, answered
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            The basics most beginners ask before they start.
+          </p>
+          <div className="mt-6">
+            <FAQ />
+          </div>
+        </section>
+
         {/* WHO IT'S FOR */}
         <section className="py-12">
           <SectionLabel>Who it's for</SectionLabel>
