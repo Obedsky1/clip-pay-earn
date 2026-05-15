@@ -13,7 +13,16 @@ import {
   Zap,
   Eye,
   DollarSign,
+  BookOpen,
+  Hash,
+  Target,
+  Rocket,
 } from "lucide-react";
+import heroCreator from "@/assets/hero-creator.jpg";
+import phoneEditing from "@/assets/phone-editing.jpg";
+import phonesStack from "@/assets/phones-stack.jpg";
+import { Quiz } from "@/components/Quiz";
+import { FAQ } from "@/components/FAQ";
 
 export const Route = createFileRoute("/")({
   component: Landing,
