@@ -23,6 +23,10 @@ const FAQS = [
     a: "Just your phone, TikTok or Instagram, and a free editor like CapCut. No laptop, no paid software.",
   },
   {
+    q: "Can I do this from anywhere in the world?",
+    a: "Yes! You can participate from any country. When it's time to get paid, you can easily withdraw your earnings directly to your local Nigerian bank account or receive it in Crypto.",
+  },
+  {
     q: "Is this guaranteed income?",
     a: "No. Earnings depend on the campaigns you join, your video quality, and how well your clips perform. The course teaches the system — your results depend on the work you put in.",
   },

@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import favicon from "@/assets/favicon.svg";
 
 function NotFoundComponent() {
   return (
@@ -83,6 +84,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       {
+        rel: "icon",
+        type: "image/svg+xml",
+        href: favicon,
+      },
+      {
         rel: "stylesheet",
         href: appCss,
       },
@@ -96,9 +102,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <script src="https://checkout.flutterwave.com/v3.js"></script>
       </head>
       <body>
         {children}

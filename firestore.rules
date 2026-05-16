@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Vendors ───────────────────────────────────────────────────────────
+    // A vendor can read and write their own document only.
+    match /vendors/{vendorId} {
+      allow read, write: if request.auth != null && request.auth.uid == vendorId;
+
+      // ─── Products (vendor-scoped) ────────────────────────────────────
+      match /products/{productId} {
+        // Authenticated vendor can manage their own products
+        allow read, write: if request.auth != null && request.auth.uid == vendorId;
+      }
+
+      // ─── Customers (vendor-scoped) ───────────────────────────────────
+      match /customers/{customerId} {
+        allow read, write: if request.auth != null && request.auth.uid == vendorId;
+      }
+
+      // ─── Conversations (vendor-scoped) ───────────────────────────────
+      match /conversations/{conversationId} {
+        allow read, write: if request.auth != null && request.auth.uid == vendorId;
+
+        match /messages/{messageId} {
+          allow read, write: if request.auth != null && request.auth.uid == vendorId;
+        }
+      }
+
+      // ─── Automation settings (vendor-scoped) ─────────────────────────
+      match /automation/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == vendorId;
+      }
+
+      // ─── WhatsApp connection credentials (vendor-scoped) ─────────────
+      match /whatsapp_connections/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == vendorId;
+      }
+    }
+
+    // ─── Public Stores ──────────────────────────────────────────────────────
+    // Storefronts must be publicly readable (WhatsApp webview, no auth)
+    match /stores/{storeId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ─── Store Slugs (lookup table) ─────────────────────────────────────────
+    match /store_slugs/{slug} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ─── Affiliates (Bounty Program) ────────────────────────────────────────
+    match /affiliates/{document=**} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+  }
+}

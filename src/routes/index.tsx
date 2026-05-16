@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { trackReferralPurchase } from "@/lib/firebase";
 import {
   Smartphone,
   Scissors,
@@ -17,12 +19,17 @@ import {
   Hash,
   Target,
   Rocket,
+  AlertTriangle,
+  Trophy,
 } from "lucide-react";
-import heroCreator from "@/assets/hero-creator.jpg";
 import phoneEditing from "@/assets/phone-editing.jpg";
 import phonesStack from "@/assets/phones-stack.jpg";
+import heroVideo from "@/assets/Free Clipping Course Clipping Culture Whop.mp4";
+import successImg from "@/assets/WhopClips_Success.webp";
+import reviewImg from "@/assets/WhopClips_Review.webp";
 import { Quiz } from "@/components/Quiz";
 import { FAQ } from "@/components/FAQ";
+import { CampaignMockup } from "@/components/CampaignMockup";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -38,17 +45,99 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+declare global {
+  interface Window {
+    FlutterwaveCheckout: any;
+  }
+}
+
 function CTAButton({ children, large }: { children: React.ReactNode; large?: boolean }) {
+  const [showModal, setShowModal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleCheckout = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setLoading(true);
+    const savedRef = localStorage.getItem("affiliate_ref") || "";
+
+    if (savedRef) {
+      trackReferralPurchase(savedRef).finally(() => {
+        window.location.href = "https://flutterwave.com/pay/ifoz6dm4wi78";
+      });
+    } else {
+      window.location.href = "https://flutterwave.com/pay/ifoz6dm4wi78";
+    }
+  };
+
   return (
-    <a
-      href="#final"
-      className={`inline-flex items-center justify-center gap-2 rounded-full font-bold text-primary-foreground transition-transform active:scale-95 hover:scale-[1.02] ${
-        large ? "px-8 py-5 text-lg w-full" : "px-6 py-4 text-base"
-      }`}
-      style={{ background: "var(--grad-cta)", boxShadow: "var(--shadow-glow)" }}
-    >
-      {children} <ArrowRight className="h-5 w-5" />
-    </a>
+    <>
+      <div className="flex flex-col items-center w-full">
+        <button
+          onClick={() => setShowModal(true)}
+          className={`inline-flex items-center justify-center gap-2 rounded-full font-bold text-primary-foreground transition-transform active:scale-95 hover:scale-[1.02] ${large ? "px-8 py-5 text-lg w-full" : "px-6 py-4 text-base"
+            }`}
+          style={{ background: "var(--grad-cta)", boxShadow: "var(--shadow-glow)" }}
+        >
+          {children} <ArrowRight className="h-5 w-5" />
+        </button>
+        <div className="mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-500">
+          <Check className="h-4 w-4" />
+          <span>Powered by Flutterwave</span>
+        </div>
+      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-6 shadow-xl relative animate-in zoom-in-95 duration-200">
+            <button 
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-bold mb-2">Final Step</h3>
+            <p className="text-sm text-muted-foreground mb-6">Enter your email address to securely process your payment of ₦4,999.</p>
+            
+            <form onSubmit={handleCheckout} className="space-y-4">
+              <div>
+                <input 
+                  type="email" 
+                  required
+                  placeholder="you@email.com"
+                  className="w-full rounded-xl border border-border bg-secondary/50 px-4 py-3 outline-none focus:border-primary transition-colors"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <button 
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl py-3 font-bold text-primary-foreground disabled:opacity-50"
+                style={{ background: "var(--grad-cta)" }}
+              >
+                {loading ? "Processing..." : "Continue to Payment"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function ScarcityBanner() {
+  return (
+    <div className="mx-auto mt-6 max-w-sm rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-left">
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+        <p className="text-[14px] leading-snug text-foreground/90">
+          <span className="font-bold text-red-500">Strict Limit:</span> We are only onboarding the first 100 students. When this month's cohort closes, you will have to wait until the first batch earns their $1,000 before we can onboard others.
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -60,7 +149,32 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+function TelegramBanner() {
+  return (
+    <a
+      href="https://t.me/nigeriaclippers"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0088cc]/10 p-4 text-[#0088cc] transition-colors hover:bg-[#0088cc]/20 border border-[#0088cc]/20"
+    >
+      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.11.03-1.93 1.23-5.46 3.62-.51.35-.98.52-1.4.51-.46-.01-1.35-.26-2.01-.48-.81-.27-1.46-.42-1.4-.88.03-.24.36-.48.97-.74 3.78-1.65 6.31-2.74 7.58-3.27 3.61-1.51 4.36-1.77 4.85-1.78.11 0 .35.03.48.14.11.08.14.22.15.34-.01.07-.01.19-.03.26z" />
+      </svg>
+      <span className="font-bold text-sm">Join Nigeria Clippers on Telegram for updates</span>
+      <ArrowRight className="h-4 w-4" />
+    </a>
+  );
+}
+
 function Landing() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      localStorage.setItem("affiliate_ref", ref);
+    }
+  }, []);
+
   return (
     <main className="min-h-screen bg-background text-foreground antialiased">
       <div className="mx-auto max-w-xl px-5">
@@ -70,12 +184,12 @@ function Landing() {
             <Sparkles className="h-3 w-3" /> For African creators
           </SectionLabel>
           <h1 className="mt-5 text-[40px] leading-[1.05] font-black tracking-tight sm:text-5xl">
-            TikTok goes viral.{" "}
+            Most creators depend on platform payouts.{" "}
             <span
               className="bg-clip-text text-transparent"
               style={{ backgroundImage: "var(--grad-hero)" }}
             >
-              Most African creators still don't get paid.
+              Smart creators learn clipping and brand campaigns instead.
             </span>
           </h1>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed">
@@ -83,27 +197,29 @@ function Landing() {
             directly to post short clips on TikTok, Reels & Facebook.
           </p>
           <div className="relative mt-8 overflow-hidden rounded-[28px] border border-border">
-            <img
-              src={heroCreator}
-              alt="Young creator filming a TikTok-style video on their phone"
-              width={1024}
-              height={1280}
-              className="aspect-[4/5] w-full object-cover"
+            <video
+              src={heroVideo}
+              controls
+              playsInline
+              className="w-full h-auto"
             />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background via-background/70 to-transparent p-4">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-primary" /> Live now
-              </div>
-              <div className="mt-1 text-sm font-semibold">
-                Real creators are already earning from clips
+            <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-background/80 to-transparent p-4 flex items-start justify-between pointer-events-none">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-primary" /> Live now
+                </div>
+                <div className="mt-1 text-sm font-semibold">
+                  Real creators are already earning from clips
+                </div>
               </div>
             </div>
           </div>
           <div className="mt-8 space-y-3">
             <CTAButton large>Learn How It Works</CTAButton>
+            <ScarcityBanner />
             <a
               href="#how"
-              className="block text-center text-sm font-semibold text-muted-foreground underline underline-offset-4"
+              className="block pt-2 text-center text-sm font-semibold text-muted-foreground underline underline-offset-4"
             >
               Start from zero →
             </a>
@@ -123,6 +239,11 @@ function Landing() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* CAMPAIGN MOCKUP */}
+        <section className="py-8">
+          <CampaignMockup />
         </section>
 
         {/* REALITY */}
@@ -284,7 +405,7 @@ function Landing() {
           </div>
 
           <div className="mt-8">
-            <CTAButton large>Get Access to Clipping System</CTAButton>
+            <CTAButton large>Get Access for ₦4,999</CTAButton>
           </div>
         </section>
 
@@ -531,7 +652,7 @@ function Landing() {
           </div>
 
           <div className="mt-8">
-            <CTAButton large>Get Access to Clipping System</CTAButton>
+            <CTAButton large>Get Access for ₦4,999</CTAButton>
           </div>
         </section>
 
@@ -552,17 +673,51 @@ function Landing() {
           </div>
         </section>
 
-        {/* IMAGE BREAK */}
-        <section className="py-8">
-          <div className="overflow-hidden rounded-[28px] border border-border">
-            <img
-              src={phonesStack}
-              alt="Three phones stacked showing short videos with view counts"
-              width={1024}
-              height={1280}
-              loading="lazy"
-              className="aspect-[4/5] w-full object-cover"
-            />
+        {/* SELLING & PROOF */}
+        <section className="py-12">
+          <SectionLabel>Real results</SectionLabel>
+          <h2 className="mt-4 text-3xl font-black leading-tight">
+            Proof this system works
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Real people, real views, and real payouts from brand campaigns.
+          </p>
+
+          <div className="mt-8 space-y-6">
+            <div className="overflow-hidden rounded-[28px] border border-border bg-secondary shadow-xl">
+              <img
+                src={successImg}
+                alt="Screenshot showing successful video campaign results"
+                className="w-full"
+                loading="lazy"
+              />
+              <div className="p-4">
+                <p className="text-sm font-semibold text-center">Consistent views = Consistent payouts</p>
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-[28px] border border-border">
+              <img
+                src={phonesStack}
+                alt="Three phones stacked showing short videos with view counts"
+                width={1024}
+                height={1280}
+                loading="lazy"
+                className="aspect-[4/5] w-full object-cover"
+              />
+            </div>
+
+            <div className="overflow-hidden rounded-[28px] border border-border bg-secondary shadow-xl">
+              <img
+                src={reviewImg}
+                alt="User review showing positive feedback"
+                className="w-full"
+                loading="lazy"
+              />
+              <div className="p-4">
+                <p className="text-sm font-semibold text-center">Join the creators winning right now</p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -612,20 +767,35 @@ function Landing() {
           >
             <SectionLabel>Final step</SectionLabel>
             <h2 className="mt-4 text-3xl font-black leading-tight">
-              Start learning the system that pays creators for content
+              Get the global Clipping Income System valued at $500 for just ₦4999 today as we onboard nigeria cohort
             </h2>
             <p className="mt-3 text-[15px] text-muted-foreground italic">
               "You are no longer depending on platform payouts. You are working directly with
               people who pay for attention."
             </p>
             <div className="mt-7">
-              <CTAButton large>Get Access to Clipping System</CTAButton>
+              <CTAButton large>Get Access for ₦4,999</CTAButton>
             </div>
+            <ScarcityBanner />
             <p className="mt-4 text-xs text-muted-foreground">
-              Beginner friendly. No laptop required.
+              Beginner friendly. No laptop required. Only ₦4,999 one-time payment.
             </p>
           </div>
         </section>
+
+        <div className="mb-10 text-center">
+          <Link
+            to="/bounty"
+            className="inline-flex items-center gap-2 rounded-xl border border-border bg-secondary px-5 py-3 text-sm font-bold text-foreground transition-all hover:scale-105 active:scale-95"
+          >
+            <Trophy className="h-5 w-5 text-amber-500" />
+            Join the $2,000 Affiliate Bounty
+          </Link>
+        </div>
+
+        <div className="mb-10">
+          <TelegramBanner />
+        </div>
 
         <footer className="pb-10 pt-4 text-center text-xs text-muted-foreground">
           © {new Date().getFullYear()} Clipping Income System
