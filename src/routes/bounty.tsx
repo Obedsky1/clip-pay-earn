@@ -46,7 +46,24 @@ function BountyPage() {
 
   useEffect(() => {
     getTopAffiliates().then(data => {
-      setLeaderboard(data);
+      const combined = [...data];
+      const demoData = [
+        { whatsapp: "08031234567", score: 14 },
+        { whatsapp: "09029876543", score: 9 },
+        { whatsapp: "08145559999", score: 7 },
+        { whatsapp: "07061112222", score: 5 },
+        { whatsapp: "08097778888", score: 3 }
+      ];
+      
+      demoData.forEach(demo => {
+        if (!combined.find(d => d.whatsapp === demo.whatsapp)) {
+          combined.push(demo);
+        }
+      });
+      
+      combined.sort((a, b) => b.score - a.score);
+      
+      setLeaderboard(combined);
       setLoadingLeaderboard(false);
     });
   }, []);
